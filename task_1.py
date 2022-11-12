@@ -1,11 +1,30 @@
 import os
-
+from datetime import datetime
 
 def logger(old_function):
-    ...
 
     def new_function(*args, **kwargs):
-        ...
+        print(f'args: {args}, kwargs: {kwargs}')
+        print(f'Вызов функции: {old_function.__name__}')
+
+        result_logger = old_function(*args, **kwargs)
+
+        print(f'result: {result_logger}')
+
+        path = 'main.log'
+
+        if os.path.exists(path):
+            with open('main.log', 'a+', encoding='utf-8') as f:
+                f.write(str(f'Функция: {old_function.__name__} Аргументы: {args} or/and {kwargs}\n'))
+                f.write(str(f'Результат: {result_logger}\n\n'))
+                f.close()
+        else:
+            with open('main.log', 'w+', encoding='utf-8') as f:
+                f.write(str(f'дата лога: {datetime.now().strftime("%Y-%m-%d %H:%M")}\n\n'))
+                f.write(str(f'функция: {old_function.__name__} Аргументы: {args} or/and {kwargs}\n'))
+                f.write(str(f'Результат: {result_logger}\n\n'))
+                f.close()
+        return result_logger
 
     return new_function
 
