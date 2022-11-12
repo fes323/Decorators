@@ -1,13 +1,20 @@
 import os
+from datetime import datetime
 
 
 def logger(path):
-    ...
+    foo_start_time = datetime.now().strftime("%Y-%m-%d %H:%M")
 
     def __logger(old_function):
         def new_function(*args, **kwargs):
-            ...
-
+            result = old_function(*args, **kwargs)
+            with open(path, "a", encoding="utf-8") as f:
+                f.write(f'Дата запуска функции: {foo_start_time}\n'
+                        f'Название функции: {old_function.__name__}.\n'
+                        f'Аргументы: {args}, {kwargs}\n'
+                        f'Результат выполнения: {result}\n\n')
+                f.close()
+                return result
         return new_function
 
     return __logger
